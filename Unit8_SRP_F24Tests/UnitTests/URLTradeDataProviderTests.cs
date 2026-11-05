@@ -22,7 +22,7 @@ namespace Unit8_SRP_F24Tests.UnitTests;
 
 
         [TestMethod()]
-        public void TestSize1()
+        public async Task TestSize1()
         {
             //Arrange
             ILogger logger = new ConsoleLogger();
@@ -31,7 +31,7 @@ namespace Unit8_SRP_F24Tests.UnitTests;
             ITradeDataProvider tradeProvider = new URLTradeDataProvider(tradeURL, logger);
 
             //Act
-            IEnumerable<string> trades = tradeProvider.ReadTradeData();
+            IEnumerable<string> trades = await tradeProvider.ReadTradeDataAsync();
 
             //Assert
 
@@ -39,7 +39,7 @@ namespace Unit8_SRP_F24Tests.UnitTests;
         }
         
         [TestMethod()]
-        public void TestSize5()
+        public async Task TestSize5()
         {
             //Arrange
             ILogger logger = new ConsoleLogger();
@@ -48,7 +48,7 @@ namespace Unit8_SRP_F24Tests.UnitTests;
             ITradeDataProvider tradeProvider = new URLTradeDataProvider(tradeURL, logger);
 
             //Act
-            IEnumerable<string> trades = tradeProvider.ReadTradeData();
+            IEnumerable<string> trades = await tradeProvider.ReadTradeDataAsync();
 
             //Assert
 

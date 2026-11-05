@@ -20,7 +20,7 @@ public class RestfulTradeDataProviderTests
 
 
     [TestMethod()]
-    public void TestSize3()
+    public async Task TestSize3()
     {
         //Arrange
         ILogger logger = new ConsoleLogger();
@@ -29,7 +29,7 @@ public class RestfulTradeDataProviderTests
         ITradeDataProvider tradeProvider = new RestfulTradeDataProvider(restfulURL, logger);
 
         //Act
-        IEnumerable<string> trades = tradeProvider.ReadTradeData();
+        IEnumerable<string> trades = await tradeProvider.ReadTradeDataAsync();
 
         //Assert
 

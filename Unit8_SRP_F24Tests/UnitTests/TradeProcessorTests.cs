@@ -7,7 +7,7 @@ namespace Unit8_SRP_F24Tests.UnitTests;
 public class TradeProcessorTests
 {
     [TestMethod]
-    public void ProcessTrades_ReadsParsesAndStoresTradesInOrder()
+    public async Task ProcessTrades_ReadsParsesAndStoresTradesInOrder()
     {
         // Arrange
         var calls = new List<string>();
@@ -23,7 +23,7 @@ public class TradeProcessorTests
         var processor = new TradeProcessor(dataProvider, parser, storage);
 
         // Act
-        processor.ProcessTrades();
+        await processor.ProcessTradesAsync();
 
         // Assert
         CollectionAssert.AreEqual(new[] { "read", "parse", "store" }, calls);
@@ -32,7 +32,7 @@ public class TradeProcessorTests
     }
 
     [TestMethod]
-    public void ProcessTrades_WithNoLines_StillParsesAndStoresEmptyResults()
+    public async Task ProcessTrades_WithNoLines_StillParsesAndStoresEmptyResults()
     {
         // Arrange
         var calls = new List<string>();
@@ -44,7 +44,7 @@ public class TradeProcessorTests
         var processor = new TradeProcessor(dataProvider, parser, storage);
 
         // Act
-        processor.ProcessTrades();
+        await processor.ProcessTradesAsync();
 
         // Assert
         CollectionAssert.AreEqual(new[] { "read", "parse", "store" }, calls);
@@ -53,7 +53,7 @@ public class TradeProcessorTests
     }
 
     [TestMethod]
-    public void ProcessTrades_WhenDataProviderFails_PropagatesExceptionAndDoesNotContinue()
+    public async Task ProcessTrades_WhenDataProviderFails_PropagatesExceptionAndDoesNotContinue()
     {
         // Arrange
         var calls = new List<string>();
@@ -64,8 +64,8 @@ public class TradeProcessorTests
         var processor = new TradeProcessor(dataProvider, parser, storage);
 
         // Act
-        var actualException = Assert.ThrowsException<InvalidOperationException>(
-            () => processor.ProcessTrades());
+        var actualException = await Assert.ThrowsExceptionAsync<InvalidOperationException>(
+            () => processor.ProcessTradesAsync());
 
         // Assert
         Assert.AreSame(expectedException, actualException);
@@ -73,7 +73,7 @@ public class TradeProcessorTests
     }
 
     [TestMethod]
-    public void ProcessTrades_WhenParserFails_PropagatesExceptionAndDoesNotStore()
+    public async Task ProcessTrades_WhenParserFails_PropagatesExceptionAndDoesNotStore()
     {
         // Arrange
         var calls = new List<string>();
@@ -84,8 +84,8 @@ public class TradeProcessorTests
         var processor = new TradeProcessor(dataProvider, parser, storage);
 
         // Act
-        var actualException = Assert.ThrowsException<InvalidOperationException>(
-            () => processor.ProcessTrades());
+        var actualException = await Assert.ThrowsExceptionAsync<InvalidOperationException>(
+            () => processor.ProcessTradesAsync());
 
         // Assert
         Assert.AreSame(expectedException, actualException);
@@ -111,15 +111,15 @@ public class TradeProcessorTests
             lines = Array.Empty<string>();
         }
 
-        public IEnumerable<string> ReadTradeData()
+        public Task<IEnumerable<string>> ReadTradeDataAsync()
         {
             calls.Add("read");
             if (exception is not null)
             {
-                throw exception;
+                return Task.FromException<IEnumerable<string>>(exception);
             }
 
-            return lines;
+            return Task.FromResult(lines);
         }
     }
 
@@ -175,4 +175,3 @@ public class TradeProcessorTests
         }
     }
 }
-

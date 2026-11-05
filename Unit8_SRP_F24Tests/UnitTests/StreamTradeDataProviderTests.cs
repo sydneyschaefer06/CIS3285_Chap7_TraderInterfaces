@@ -23,7 +23,7 @@ public class StreamTradeDataProviderTests
 
 
     [TestMethod()]
-    public void TestLocaFile()
+    public async Task TestLocaFile()
     {
         //Arrange
         ILogger logger = new ConsoleLogger();
@@ -33,14 +33,14 @@ public class StreamTradeDataProviderTests
         ITradeDataProvider tradeProvider = new StreamTradeDataProvider(tradeStream, logger);
 
         //Act
-        IEnumerable<string> trades = tradeProvider.ReadTradeData();
+        IEnumerable<string> trades = await tradeProvider.ReadTradeDataAsync();
 
         //Assert
         Assert.AreEqual(countStrings(trades), 1);
     }
 
     [TestMethod()]
-    public void TestLocalFileFiveTrades()
+    public async Task TestLocalFileFiveTrades()
     {
         //Arrange
         ILogger logger = new ConsoleLogger();
@@ -50,7 +50,7 @@ public class StreamTradeDataProviderTests
         ITradeDataProvider tradeProvider = new StreamTradeDataProvider(tradeStream, logger);
 
         //Act
-        IEnumerable<string> trades = tradeProvider.ReadTradeData();
+        IEnumerable<string> trades = await tradeProvider.ReadTradeDataAsync();
 
         //Assert
         Assert.AreEqual(5, countStrings(trades));
