@@ -183,6 +183,20 @@ public class SimpleTradeValidatorTests
     }
 
     [TestMethod]
+    public void EmptyCurrencyCode_ReturnsFalse()
+    {
+        // Arrange
+        var validator = new SimpleTradeValidator(new StubLogger());
+        string[] fields = { "", "1000", "1.25" };
+
+        // Act
+        bool isValid = validator.ValidateTradeData(fields, 1);
+
+        // Assert
+        Assert.IsFalse(isValid);
+    }
+
+    [TestMethod]
     public void NonIntegerAmount_ReturnsFalse()
     {
         // Arrange
@@ -259,4 +273,3 @@ public class SimpleTradeValidatorTests
         }
     }
 }
-
